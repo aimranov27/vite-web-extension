@@ -12,6 +12,9 @@ If you tend to have tons of tabs open, or are a OneTab user, make sure to check 
 
 </div>
 
+> Maintained fork of [JohnBra/vite-web-extension](https://github.com/JohnBra/vite-web-extension), kept on the latest
+> Vite, React, TypeScript and Tailwind releases, with Bun as the package manager.
+
 ## Table of Contents
 
 - [Intro](#intro)
@@ -38,13 +41,14 @@ well with this template. [Check it out here](https://gist.github.com/JohnBra/c81
 
 ## Features <a name="features"></a>
 - [React 19](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
+- [TypeScript 7](https://www.typescriptlang.org/)
 - [Tailwind CSS 4](https://tailwindcss.com/)
 - [i18n (optional)](https://developer.chrome.com/docs/extensions/reference/api/i18n)
 - [Cross browser development with polyfill (optional)](https://github.com/mozilla/webextension-polyfill?tab=readme-ov-file#basic-setup-with-module-bundlers)
-- [ESLint](https://eslint.org/)
+- [Vite 8](https://vite.dev/)
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter)
 - [Chrome Extension Manifest Version 3](https://developer.chrome.com/docs/extensions/mv3/intro/)
-- [Github Action](https://github.com/JohnBra/vite-web-extension/actions/workflows/ci.yml) to build and zip your extension (manual trigger)
+- [Github Action](https://github.com/aimranov27/vite-web-extension/actions/workflows/ci.yml) to typecheck, lint and build your extension
 
 ## Usage <a name="usage"></a>
 
@@ -57,15 +61,16 @@ for Chrome by default.
 
 1. Clone this repository or click "Use this template"
 2. Change `name` and `description` in `manifest.json`
-3. Run `yarn` or `npm i` (check your node version >= 16)
-4. Run `yarn dev[:chrome|:firefox]`, or `npm run dev[:chrome|:firefox]`
+3. Run `bun install` (needs [Bun](https://bun.sh) and Node 24, see `.nvmrc`)
+4. Run `bun run dev[:chrome|:firefox]`
 
 Running a `dev` command will build your extension and watch for changes in the 
 source files. Changing the source files will refresh the corresponding 
 `dist_<chrome|firefox>` folder.
 
-To create an optimized production build, run `yarn build[:chrome|:firefox]`, or
-`npm run build[:chrome|:firefox]`.
+To create an optimized production build, run `bun run build[:chrome|:firefox]`.
+
+Run `bun run check` before you ship: it typechecks, lints and builds both browsers.
 
 #### Load your extension
 For Chrome
@@ -116,12 +121,12 @@ To include the side panel for Chrome add the following to the `manifest.json`:
 If you need to declare pages in addition to the manifest pages, e.g. a custom `app` page, create a 
 new folder in the `pages` directory and add the corresponding `.html`, `.tsx` and `.css` 
 files (see `options/*` for an example to copy). Then include the root html in the `vite.config.base.ts` 
-file under `build.rollupOptions.input` like so:
+file under `build.rolldownOptions.input` like so:
 
 ```typescript
 // ...
 build: {
-   rollupOptions: {
+   rolldownOptions: {
       input: {
          app: resolve(pagesDir, "app", "index.html"),
       },
@@ -156,12 +161,13 @@ be copied into the build folder unless the `localize` flag is set to `true`.
 To upload an extension to the Chrome store you have to pack (zip) it and then upload it to your item 
 in the Chrome Web Store.
 
-This repo includes a Github Action Workflow to create a 
-[optimized prod build and the zip file](https://github.com/JohnBra/vite-web-extension/actions/workflows/ci.yml).
+This repo includes a Github Action Workflow to create an
+[optimized prod build and the zip file](https://github.com/aimranov27/vite-web-extension/actions/workflows/ci.yml).
+It runs on every push to `main` and every pull request, and you can also start it by hand.
 
 To run the workflow do the following:
 1. Go to the **"Actions"** tab in your forked repository from this template
-2. In the left sidebar click on **"Build and Zip Chrome Extension"**
+2. In the left sidebar click on **"CI"**
 3. Click on **"Run Workflow"** and select the main branch, then **"Run Workflow"**
 4. Refresh the page and click the most recent run
 5. In the summary page **"Artifacts"** section click on the generated **"vite-web-extension-chrome"**
@@ -174,7 +180,7 @@ To run the workflow do the following:
 - [Chrome Extension i18n](https://developer.chrome.com/docs/extensions/reference/api/i18n#description)
 - [Cross browser development with webextension-polyfill](https://github.com/mozilla/webextension-polyfill?tab=readme-ov-file#webextension-browser-api-polyfill)
 - [@crxjs/vite-plugin](https://crxjs.dev/vite-plugin)
-- [Rollup](https://rollupjs.org/guide/en/)
+- [Rolldown](https://rolldown.rs/)
 - [Tailwind CSS 4](https://tailwindcss.com/docs/configuration)
 
 # Contributing <a name="contributing"></a>
