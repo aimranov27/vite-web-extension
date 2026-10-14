@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "webextensions": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": ["dist_chrome/**", "dist_firefox/**"]
+}

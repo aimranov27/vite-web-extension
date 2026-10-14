@@ -1,33 +1,45 @@
-name: Build and Zip Chrome Extension
+name: CI
 
 on:
+  push:
+    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
+  check:
+    name: Check and build
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      # Vite runs on Node; bun installs packages and runs scripts.
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
         with:
-          fetch-depth: 2
- 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+          node-version-file: .nvmrc
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 18
-          cache: 'yarn'
- 
+          bun-version-file: package.json
+
       - name: Install dependencies
-        run: yarn
- 
-      - name: Build Chrome
-        run: yarn build:chrome
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck, lint and build
+        run: bun run check
 
       - name: Upload Chrome extension artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: vite-web-extension-chrome
           path: dist_chrome
+
+      - name: Upload Firefox extension artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: vite-web-extension-firefox
+          path: dist_firefox
